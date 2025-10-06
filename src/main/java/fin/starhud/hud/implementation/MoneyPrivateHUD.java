@@ -51,8 +51,8 @@ public class MoneyPrivateHUD extends AbstractHUD {
         if (currentTime - lastUpdate >= 15000) {
             lastUpdate = currentTime;
 
-            if (MONEY_PRIVATE_SETTING.privateValue != null && MONEY_TEAM_SETTING.teamValue != null) {
-                cachedTeamMoneyString = MoneyTeamHUD.formatMoney(MONEY_TEAM_SETTING.teamValue);
+            if (MONEY_PRIVATE_SETTING.privateValue != null) {
+                cachedTeamMoneyString = MONEY_TEAM_SETTING.teamValue!=null?MoneyTeamHUD.formatMoney(MONEY_TEAM_SETTING.teamValue):null;
                 cachedPrivateMoneyString = formatMoney(MONEY_PRIVATE_SETTING.privateValue);
                 cachedPrivateColor = getBalanceColor(MONEY_PRIVATE_SETTING.privateValue);
             }
