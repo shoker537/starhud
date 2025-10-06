@@ -55,8 +55,11 @@ public class MoneyPrivateHUD extends AbstractHUD {
                 cachedTeamMoneyString = MONEY_TEAM_SETTING.teamValue!=null?MoneyTeamHUD.formatMoney(MONEY_TEAM_SETTING.teamValue):null;
                 cachedPrivateMoneyString = formatMoney(MONEY_PRIVATE_SETTING.privateValue);
                 cachedPrivateColor = getBalanceColor(MONEY_PRIVATE_SETTING.privateValue);
+            } else {
+                cachedPrivateMoneyString = null;
             }
         }
+        if(cachedPrivateMoneyString == null) return false;
         displayMode = getSettings().getDisplayMode();
 
         int width;

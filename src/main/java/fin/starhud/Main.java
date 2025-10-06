@@ -9,6 +9,7 @@ import fin.starhud.init.EventInit;
 import fin.starhud.init.KeybindInit;
 import fin.starhud.network.MoneyDataPayload;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
@@ -24,6 +25,7 @@ public class Main implements ClientModInitializer {
 
     public static KeyBinding openEditHUDKey;
     public static KeyBinding toggleHUDKey;
+    public static long moneyUpdatedAt = 0;
 
     @Override
     public void onInitializeClient() {
@@ -40,6 +42,13 @@ public class Main implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(MoneyDataPayload.ID, (payload, context) -> {
             MoneyPrivateSettings.privateValue = payload.privateBalance();
             MoneyTeamSettings.teamValue = payload.teamBalance().orElse(null);
+            moneyUpdatedAt = System.currentTimeMillis();
+        });
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (System.currentTimeMillis() - moneyUpdatedAt > 20000) {
+                MoneyPrivateSettings.privateValue = null;
+                MoneyTeamSettings.teamValue = null;
+            }
         });
     }
 
