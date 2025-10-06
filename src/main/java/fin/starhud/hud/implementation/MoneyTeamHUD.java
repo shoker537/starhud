@@ -26,7 +26,7 @@ public class MoneyTeamHUD extends AbstractHUD {
 
     private static String cachedPrivateMoneyString = null;
     private static String cachedTeamMoneyString = null;
-    private static long cachedMinute = -1;
+    private static long lastUpdate = -1;
 
     private static int cachedTeamColor = 0xFFFFFFFF;
 
@@ -47,10 +47,9 @@ public class MoneyTeamHUD extends AbstractHUD {
     @Override
     public boolean collectHUDInformation() {
         long currentTime = System.currentTimeMillis();
-        long minute = currentTime / 60000;
 
-        if (minute != cachedMinute) {
-            cachedMinute = minute;
+        if (currentTime - lastUpdate >= 15000) {
+            lastUpdate = currentTime;
 
             if (MONEY_PRIVATE_SETTING.privateValue != null && MONEY_TEAM_SETTING.teamValue != null) {
                 cachedPrivateMoneyString = MoneyPrivateHUD.formatMoney(MONEY_PRIVATE_SETTING.privateValue);
@@ -135,7 +134,7 @@ public class MoneyTeamHUD extends AbstractHUD {
     @Override
     public void update() {
         super.update();
-        cachedMinute = -1;
+        lastUpdate = -1;
         cachedTeamColor = -1;
     }
 }
